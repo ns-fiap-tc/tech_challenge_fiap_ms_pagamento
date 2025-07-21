@@ -1,0 +1,73 @@
+# run command:  docker-compose up -d
+# docker run -it lanchonete-produto-produto bash
+# docker network inspect app-bridge | jq '.[].Containers[].Name'
+# mvn -DskipTests -DskipITs=true clean package spring-boot:repackage
+
+
+name: lanchonete
+
+services:
+    pagamento:
+        container_name: pagamento
+        build:
+            context: ./pagamento
+            dockerfile: Dockerfile
+        ports:
+            - 8084:8080
+        depends_on:
+            mongodbpag:
+                condition: service_healthy
+        networks:
+            - app-network
+            - pagamento-network
+            - external-network
+
+    pagamento-mock:
+        container_name: pagamento-mock
+        build:
+            context: ./pagamento-mock
+            dockerfile: Dockerfile
+        ports:
+            - 8081:8080
+        networks:
+            - pagamento-network
+
+    mongodbpag:
+        image: mongo:latest
+        container_name: mongodbpag
+        hostname: mongodbpag
+        env_file:
+            - ./pagamento/.env
+        environment:
+            MONGO_INITDB_DATABASE: ${DB_NAME}
+        healthcheck:
+            test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+        volumes:
+            - ./volumes/mongodb/database:/data/db
+        ports:
+            - 27017:27017
+        networks:
+            - pagamento-network
+
+networks:
+    pagamento-network:
+        name: pagamento-net
+        driver: bridge
+        internal: true
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.5.4.0/24
+
+    app-network:
+        name: app-net
+        driver: bridge
+        external: true
+
+    external-network:
+        name: lanch-net
+        driver: bridge
+        external: true
