@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>br.com.fiap.lanchonete</groupId>
-		<artifactId>lanchonete-parent</artifactId>
+		<artifactId>lanchonete-pagamento-parent</artifactId> <!-- ATENÇÃO: Mudou o artifactId do parent -->
 		<version>0.1.0-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath>../pom.xml</relativePath> <!-- Caminho relativo para o parent POM -->
 	</parent>
 
 	<groupId>br.com.fiap.lanchonete</groupId>
@@ -18,21 +18,11 @@
 
 	<properties>
 		<start-class>br.com.fiap.lanchonete.pagamento.PagamentoApplication</start-class>
-		<java.version>17</java.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<spring-cloud.version>2024.0.0</spring-cloud.version>
 		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -40,17 +30,14 @@
 		<dependency>
 			<groupId>br.com.fiap.lanchonete</groupId>
 			<artifactId>pedido-commons</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>br.com.fiap.lanchonete</groupId>
 			<artifactId>pagamento-commons</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
-			<version>3.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -97,12 +84,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
-<!--
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
--->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -116,7 +97,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.24.0</version>
+			<!-- Versão gerenciada pelo parent. Removida aqui. -->
 		</dependency>
 
 		<dependency>
@@ -138,25 +119,22 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-			<version>2.8.9</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.8.9</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>${mapstruct.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
-			<version>${mapstruct.version}</version>
+			<scope>provided</scope> <!-- MapStruct processor é provided -->
 		</dependency>
 
 		<dependency>
@@ -174,14 +152,43 @@
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
-			<version>4.4.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.9.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>br.com.fiap.lanchonete.pagamento.PagamentoApplication</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amapstruct.defaultComponentModel=spring</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

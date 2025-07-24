@@ -6,9 +6,7 @@ COPY . /build/
 # Se modo for Produção, builda aplicação com mvn, senão pula etapa
 ARG MODE=prod
 RUN if [ "$MODE" = "prod" ]; then \
-    mvn -N -DskipTests install && \
-    mvn -DskipTests -DskipITs=true install && \
-    mvn -DskipTests clean package -pl pagamento-mock -am; \
+    mvn clean install -DskipTests; \
 fi
 
 # Runtime
@@ -22,7 +20,7 @@ ENV MODE=$MODE
 ENV SPRING_PROFILES_ACTIVE=$PROFILE
 
 # Produção: copia o jar buildado no stage anterior
-COPY --from=builder /build/pagamento-mock/target/*.jar ./app.jar
+COPY --from=builder /build/pagamento/target/*.jar ./app.jar
 
 # Entrada condicional: roda se o .jar existe (prod ou dev)
 CMD if [ -f "./app.jar" ]; then \

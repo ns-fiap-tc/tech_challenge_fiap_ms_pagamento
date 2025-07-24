@@ -2,7 +2,7 @@ FROM eclipse-temurin:17.0.13_11-jre-noble
 
 WORKDIR /service
 
-COPY target/*.jar ./app.jar
+COPY pagamento/target/*.jar ./app.jar
 
 ARG PROFILE=prod
 
