@@ -13,10 +13,10 @@ data "kubernetes_service" "mongodbpag-service" {
   }
 }
 
-# data "kubernetes_service" "service-pagamento-mock" {
-#   metadata {
-#     name      = "service-pagamento-mock"
-#     namespace = "default"
-#   }
-# }
+data "kubernetes_service" "service-lanchonete-app" {
+  metadata {
+    name      = "service-lanchonete-app"
+    namespace = "default"
+  }
+}
 

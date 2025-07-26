@@ -9,8 +9,10 @@ resource "kubernetes_secret" "secrets-pagamento" {
     DB_HOST             = data.kubernetes_service.mongodbpag-service.metadata[0].name
     DB_PORT             = var.db_pagamento_port
     DB_NAME             = var.db_pagamento_name
+    DB_PAGAMENTO_USERNAME = var.db_pagamento_username
+    DB_PAGAMENTO_PASSWORD = var.db_pagamento_password
     PAGAMENTO_MOCK_HOST = kubernetes_service.service-pagamento-mock.metadata[0].name
-    #PEDIDO_SERVICE_HOST = data.kubernetes_service.mongodbpag-service.metadata[0].name
+    PEDIDO_SERVICE_HOST = data.kubernetes_service.service-lanchonete-app.metadata[0].name
   }
 
   lifecycle {
@@ -94,7 +96,7 @@ resource "kubernetes_service" "service-ms-pagamento" {
     port {
       port = "80"
       target_port = "8080"
-      node_port = "30001"
+      node_port = "30003"
     }
     type = "LoadBalancer"
   }

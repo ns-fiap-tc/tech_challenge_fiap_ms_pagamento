@@ -88,7 +88,7 @@ resource "kubernetes_service" "service-pagamento-mock" {
     port {
       port = "8081"
       target_port = "8080"
-      node_port = "30002"
+      node_port = "30004"
     }
     type = "LoadBalancer"
   }
