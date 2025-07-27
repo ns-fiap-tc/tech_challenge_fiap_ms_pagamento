@@ -25,8 +25,8 @@ COPY --from=builder /build/pagamento/target/*.jar ./app.jar
 # Entrada condicional: roda se o .jar existe (prod ou dev)
 CMD if [ -f "./app.jar" ]; then \
       java -jar ./app.jar ; \
-    elif [ -f "./target/pagamento-mock-*.jar" ]; then \
-      java -jar ./target/pagamento-mock-*.jar ; \
+    elif [ -f "./target/pagamento-*.jar" ]; then \
+      java -jar ./target/pagamento-*.jar ; \
     else \
       echo "❌ Nenhum app.jar encontrado. Primeiro faça o Build da aplicação." && exit 1 ; \
     fi
