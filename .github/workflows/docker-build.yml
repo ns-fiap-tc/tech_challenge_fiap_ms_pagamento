@@ -1,0 +1,49 @@
+# Faz o build e push das imagens dos microserviços de Pagamento e Mock Pagamento
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "**/*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🔐 Login no Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: 🛠️ Build da imagem do App Pagamento Principal
+        run: |
+          docker build \
+          --build-arg MODE=prod \
+          --build-arg PROFILE=prod \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-ms-pagamento:latest \
+          -f pagamento-parent/Dockerfile .
+
+      - name: 🚀 Push da imagem do App Pagamento Principal
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-ms-pagamento:latest
+
+      - name: 🛠️ Build da imagem do Mock Pagamento
+        run: |
+          docker build \
+          --build-arg MODE=prod \
+          --build-arg PROFILE=prod \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-mock-pagamento:latest \
+          -f pagamento-mock/Dockerfile .
+
+      - name: 🚀 Push da imagem do Mock Pagamento
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-mock-pagamento:latest
