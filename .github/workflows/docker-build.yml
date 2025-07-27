@@ -30,7 +30,7 @@ jobs:
           --build-arg MODE=prod \
           --build-arg PROFILE=prod \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-ms-pagamento:latest \
-          -f pagamento-parent/Dockerfile .
+          -f pagamento-parent/Dockerfile pagamento-parent
 
       - name: 🚀 Push da imagem do App Pagamento Principal
         run: |
@@ -42,7 +42,7 @@ jobs:
           --build-arg MODE=prod \
           --build-arg PROFILE=prod \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/fiap-tech-challenge-lanchonete-mock-pagamento:latest \
-          -f pagamento-mock/Dockerfile .
+          -f pagamento-mock/Dockerfile pagamento-mock
 
       - name: 🚀 Push da imagem do Mock Pagamento
         run: |
