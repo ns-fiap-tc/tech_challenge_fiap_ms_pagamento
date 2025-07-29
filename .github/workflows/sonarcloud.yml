@@ -19,19 +19,18 @@ jobs:
         with:
           java-version: 17
           distribution: "zulu" # Alternative distribution options are available.
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v4
+      - name: Cache Maven
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze (Somente o ms pagamento-parent)
+      # 1. Compila + executa testes + gera jacoco.xml agregado
+      - name: Build with tests & JaCoCo
+        working-directory: pagamento-parent # Somente o ms pagamento-parent, o mock não é necessário para a análise
+        run: mvn -B clean verify
+      # 2. Envia análise (usa o plugin jacoco + sonar instalado no pom.xml)
+      - name: SonarCloud analysis
         working-directory: pagamento-parent
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
