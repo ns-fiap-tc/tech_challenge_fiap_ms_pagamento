@@ -1,9 +1,23 @@
 # FIAP Tech Challenge - Microsserviço de pagamento e pagamento-mock
 
+[![Terraform Deploy](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/deploy.yml/badge.svg)](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/deploy.yml)
+[![SonarQube](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/sonarcloud.yml)
+[![Build and Push Docker Images](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/docker-build.yml/badge.svg)](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_pagamento/actions/workflows/docker-build.yml)
+
 Este é o repositório que contém o código fonte do serviço de pagamento e pagamento-mock da aplicação [Lanchonete App](https://github.com/ns-fiap-tc/tech_challenge_fiap). Nele você também encontrará arquivos de configuração do Terraform que fazem o deploy da aplicação na AWS.
 
+## Cobertura de Testes
+O projeto contém testes automatizados e Sonar integrado, abaixo evidência de cobertura dos testes + link de referência para os dados do Sonar
+<img width="1759" height="243" alt="Testes aplicação" src="https://github.com/user-attachments/assets/499e8e44-114d-47b3-845f-f91d70aed9eb" />
+<img width="1415" height="947" alt="Print Sonar" src="https://github.com/user-attachments/assets/fbae5ec3-eef4-49a0-a441-73762940fd9c" />
+
+
+- Link Sonar: https://sonarcloud.io/project/overview?id=ns-fiap-tc_tech_challenge_fiap_ms_pagamento
+
 ## Passos para o provisionamento
+
 > Para completo funcionamento da plataforma, é necessário seguir o seguinte fluxo de provisionamento:
+>
 > 1. A provisão deste repositório; [infra-base](https://github.com/ns-fiap-tc/infra-base)
 > 2. A provisão do repositório dos bancos de dados: [infra-bd](https://github.com/ns-fiap-tc/infra-bd)
 > 3. A provisão do repositório do microsserviço de categoria: [tech_challenge_fiap_ms_categoria](https://github.com/ns-fiap-tc/tech_challenge_fiap_ms_categoria);
@@ -14,10 +28,12 @@ Este é o repositório que contém o código fonte do serviço de pagamento e pa
 ## 🚀 Como rodar o projeto
 
 ### 🤖 Via GitHub Actions
+
 <details>
   <summary>Passo a passo</summary>
 
 #### 📖 Resumo
+
 Este repositório possui uma pipeline automatizada chamada `Terraform Deploy` que permite **provisionar a aplicação do microsserviço de pagamento e pagamento-mock** sempre que houver um push na branch `main`.
 
 A branch é protegida e só aceita alterações que venham de PRs previamente aprovadas.
@@ -25,16 +41,19 @@ A branch é protegida e só aceita alterações que venham de PRs previamente ap
 > ⚠️ Apenas usuários com acesso ao repositório e às **GitHub Secrets** corretas conseguem utilizar esse fluxo.
 
 #### 🔐 Pré-requisitos
+
 Certifique-se de que as seguintes **secrets** estejam configuradas no repositório do GitHub (`Settings > Secrets and variables > Actions`):
+
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
-- `AWS_SESSION_TOKEN` *(se estiver usando AWS Academy)*
+- `AWS_SESSION_TOKEN` _(se estiver usando AWS Academy)_
 - `TF_VAR_DB_USERNAME`
 - `TF_VAR_DB_PASSWORD`
 
 Essas variáveis são utilizadas pelo Terraform para autenticação e execução dos planos na AWS.
 
 #### ⚙️ Etapas da pipeline `Terraform Deploy`
+
 1. 🧾 **Checkout do código**: A action clona este repositório.
 2. ⚒️ **Setup do Terraform**: Instala a ferramenta na máquina runner.
 3. 📂 **Acesso ao diretório atual**: Todos os arquivos `.tf` são lidos da raiz do repositório.
@@ -61,6 +80,7 @@ flowchart TD
 ```
 
 #### Benefícios desse fluxo
+
 - 🤖 Automatização do deploy do banco de dados
 - ✅ Redução de erros manuais
 - 🔐 Segurança no uso de credenciais via GitHub Secrets
